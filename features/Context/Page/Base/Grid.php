@@ -104,6 +104,10 @@ class Grid extends Index
         'pim-filter-attribute-metric' => [
             'Pim\Behat\Decorator\Export\Filter\BaseDecorator',
             'Pim\Behat\Decorator\Export\Filter\MetricDecorator',
+        ],
+        'pim-filter-attribute-multiselect-reference-data' => [
+            'Pim\Behat\Decorator\Export\Filter\BaseDecorator',
+            'Pim\Behat\Decorator\Export\Filter\Select2Decorator',
         ]
     ];
 

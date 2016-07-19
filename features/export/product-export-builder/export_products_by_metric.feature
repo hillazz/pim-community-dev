@@ -47,8 +47,7 @@ Feature: Export products according to metric attribute filter
     SNKRS-1R;summer_collection;1;rangers;;20;CENTIMETER
     """
 
-
-  Scenario: Export products by their metric values using the UI
+  Scenario: Export products by filtering with an empty metric using the UI
     Given the following job "csv_footwear_product_export" configuration:
       | filePath | %tmp%/product_export/product_export.csv |
     When I am on the "csv_footwear_product_export" export job edit page

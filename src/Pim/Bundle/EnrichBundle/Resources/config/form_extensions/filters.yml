@@ -47,3 +47,19 @@ extensions:
 
     pim-filter-simpleselect:
         module: pim/filter/simpleselect
+
+    pim-filter-attribute-multiselect:
+        module: pim/filter/attribute/multiselect
+        config:
+            url: pim_ui_ajaxentity_list
+            operators:
+                - IN
+                - EMPTY
+
+    pim-filter-attribute-multiselect-reference-data:
+        module: pim/filter/attribute/multiselect-reference-data
+        config:
+            url: pim_ui_ajaxentity_list
+            operators:
+                - IN
+                - EMPTY
