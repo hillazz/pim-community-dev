@@ -3,6 +3,7 @@
 namespace Akeneo\Component\Batch\Job;
 
 use Akeneo\Component\Batch\Model\JobExecution;
+use Akeneo\Component\Batch\Step\StepInterface;
 
 /**
  * Batch domain object representing a job. Job is an explicit abstraction
@@ -20,6 +21,24 @@ interface JobInterface
      * @return string the name of this job
      */
     public function getName();
+
+
+    /**
+     * Return all the steps
+     *
+     * @return StepInterface[] steps
+     */
+    public function getSteps();
+
+    /**
+     * Retrieve the step with the given name. If there is no Step with the given
+     * name, then return null.
+     *
+     * @param string $stepName
+     *
+     * @return StepInterface the Step
+     */
+    public function getStep($stepName);
 
     /**
      * Run the {@link JobExecution} and update the meta information like status

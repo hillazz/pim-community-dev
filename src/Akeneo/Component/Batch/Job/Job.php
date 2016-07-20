@@ -52,9 +52,7 @@ class Job implements JobInterface
     }
 
     /**
-     * Get the job's name
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -62,9 +60,7 @@ class Job implements JobInterface
     }
 
     /**
-     * Return all the steps
-     *
-     * @return array steps
+     * {@inheritdoc}
      */
     public function getSteps()
     {
@@ -72,12 +68,7 @@ class Job implements JobInterface
     }
 
     /**
-     * Retrieve the step with the given name. If there is no Step with the given
-     * name, then return null.
-     *
-     * @param string $stepName
-     *
-     * @return StepInterface the Step
+     * {@inheritdoc}
      */
     public function getStep($stepName)
     {
