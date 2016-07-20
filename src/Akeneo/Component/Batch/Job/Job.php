@@ -127,9 +127,9 @@ class Job implements JobInterface
      */
     final public function execute(JobExecution $jobExecution)
     {
-        $this->dispatchJobExecutionEvent(EventInterface::BEFORE_JOB_EXECUTION, $jobExecution);
-
         try {
+            $this->dispatchJobExecutionEvent(EventInterface::BEFORE_JOB_EXECUTION, $jobExecution);
+
             if ($jobExecution->getStatus()->getValue() !== BatchStatus::STOPPING) {
                 $jobExecution->setStartTime(new \DateTime());
                 $this->updateStatus($jobExecution, BatchStatus::STARTED);
@@ -145,6 +145,23 @@ class Job implements JobInterface
 
                 $this->dispatchJobExecutionEvent(EventInterface::JOB_EXECUTION_STOPPED, $jobExecution);
             }
+
+            if (($jobExecution->getStatus()->getValue() <= BatchStatus::STOPPED)
+                && (count($jobExecution->getStepExecutions()) === 0)
+            ) {
+                /* @var ExitStatus */
+                $exitStatus = $jobExecution->getExitStatus();
+                $noopExitStatus = new ExitStatus(ExitStatus::NOOP);
+                $noopExitStatus->addExitDescription("All steps already completed or no steps configured for this job.");
+                $jobExecution->setExitStatus($exitStatus->logicalAnd($noopExitStatus));
+                $this->jobRepository->updateJobExecution($jobExecution);
+            }
+
+            $this->dispatchJobExecutionEvent(EventInterface::AFTER_JOB_EXECUTION, $jobExecution);
+
+            $jobExecution->setEndTime(new \DateTime());
+            $this->jobRepository->updateJobExecution($jobExecution);
+
         } catch (JobInterruptedException $e) {
             $jobExecution->setExitStatus($this->getDefaultExitStatusForFailure($e));
             $jobExecution->setStatus(
@@ -164,22 +181,6 @@ class Job implements JobInterface
 
             $this->dispatchJobExecutionEvent(EventInterface::JOB_EXECUTION_FATAL_ERROR, $jobExecution);
         }
-
-        if (($jobExecution->getStatus()->getValue() <= BatchStatus::STOPPED)
-            && (count($jobExecution->getStepExecutions()) === 0)
-        ) {
-            /* @var ExitStatus */
-            $exitStatus = $jobExecution->getExitStatus();
-            $noopExitStatus = new ExitStatus(ExitStatus::NOOP);
-            $noopExitStatus->addExitDescription("All steps already completed or no steps configured for this job.");
-            $jobExecution->setExitStatus($exitStatus->logicalAnd($noopExitStatus));
-            $this->jobRepository->updateJobExecution($jobExecution);
-        }
-
-        $this->dispatchJobExecutionEvent(EventInterface::AFTER_JOB_EXECUTION, $jobExecution);
-
-        $jobExecution->setEndTime(new \DateTime());
-        $this->jobRepository->updateJobExecution($jobExecution);
     }
 
     /**
