@@ -3,6 +3,7 @@
 namespace Pim\Component\Connector\Writer\File\Csv;
 
 use Akeneo\Component\Batch\Item\ItemWriterInterface;
+use Akeneo\Component\Batch\Step\WorkingDirectoryAwareInterface;
 use Akeneo\Component\Buffer\BufferFactory;
 use Pim\Component\Connector\ArrayConverter\ArrayConverterInterface;
 use Pim\Component\Connector\Writer\File\AbstractFileWriter;
@@ -18,7 +19,10 @@ use Pim\Component\Connector\Writer\File\FlatItemBufferFlusher;
  * @copyright 2015 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-class Writer extends AbstractFileWriter implements ItemWriterInterface, ArchivableWriterInterface
+class Writer extends AbstractFileWriter implements
+    ItemWriterInterface,
+    ArchivableWriterInterface,
+    WorkingDirectoryAwareInterface
 {
     /** @var ArrayConverterInterface */
     protected $arrayConverter;
@@ -80,11 +84,6 @@ class Writer extends AbstractFileWriter implements ItemWriterInterface, Archivab
      */
     public function write(array $items)
     {
-        $exportDirectory = dirname($this->getPath());
-        if (!is_dir($exportDirectory)) {
-            $this->localFs->mkdir($exportDirectory);
-        }
-
         $flatItems = [];
         foreach ($items as $item) {
             $flatItems[] = $this->arrayConverter->convert($item);
@@ -114,7 +113,7 @@ class Writer extends AbstractFileWriter implements ItemWriterInterface, Archivab
         $writtenFiles = $this->flusher->flush(
             $this->flatRowBuffer,
             $writerOptions,
-            $this->getPath(),
+            $this->getWorkingDirectory() . basename($this->getPath()),
             ($parameters->has('linesPerFile') ? $parameters->get('linesPerFile') : -1),
             $this->filePathResolverOptions
         );
@@ -122,5 +121,13 @@ class Writer extends AbstractFileWriter implements ItemWriterInterface, Archivab
         foreach ($writtenFiles as $writtenFile) {
             $this->writtenFiles[$writtenFile] = basename($writtenFile);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWorkingDirectory()
+    {
+        return $this->stepExecution->getJobExecution()->getExecutionContext()->get(WorkingDirectoryAwareInterface::CONTEXT_PARAMETER);
     }
 }
