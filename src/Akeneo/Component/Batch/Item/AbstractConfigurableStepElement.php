@@ -11,9 +11,10 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
  *
  * @copyright 2016 Akeneo SAS (http://www.akeneo.com)
  * @license   http://opensource.org/licenses/MIT MIT
+ *
+ * @internal TODO: in fact this class is imho useless since we moved methods in Interface (would drop it)
  */
-abstract class AbstractConfigurableStepElement implements StepElementInterface, InitializableInterface,
-    FlushableInterface
+abstract class AbstractConfigurableStepElement implements InitializableInterface, FlushableInterface
 {
     /**
      * {@inheritdoc}
