@@ -243,6 +243,7 @@ config:
         pim/filter/attribute/price-collection: pimenrich/js/filter/attribute/price-collection
         pim/filter/attribute/multiselect-reference-data: pimenrich/js/filter/attribute/multiselect-reference-data
         pim/filter/attribute/multiselect:                pimenrich/js/filter/attribute/multiselect
+        pim/filter/attribute/simpleselect:               pimenrich/js/filter/attribute/multiselect
 
         # Product edit form
         pim/field-manager:                  pimenrich/js/product/field-manager
@@ -400,3 +401,4 @@ config:
         pim/template/filter/attribute/price-collection: pimenrich/templates/filter/attribute/price-collection.html
         pim/template/filter/attribute/multiselect-reference-data: pimenrich/templates/filter/attribute/multiselect-reference-data.html
         pim/template/filter/attribute/multiselect:                pimenrich/templates/filter/attribute/multiselect.html
+        pim/template/filter/attribute/simpleselect:               pimenrich/templates/filter/attribute/multiselect.html
