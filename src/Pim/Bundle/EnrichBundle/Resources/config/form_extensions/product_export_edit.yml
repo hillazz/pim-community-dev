@@ -57,7 +57,7 @@ extensions:
         module: pim/export/product/edit/content/data/default-attribute-filters
         parent: pim-product-export-edit-content-data
         config:
-            types: ['pim_catalog_identifier']
+            types: ['pim_catalog_identifier', 'pim_catalog_multiselect']
 
     pim-product-export-edit-content-data-help:
         module: pim/export/product/edit/content/data/help
@@ -88,8 +88,7 @@ filters:
         pim_catalog_file:
             view: pim-filter-text
         pim_catalog_multiselect:
-            view: pim-filter-text
-            # view: pim-filter-multiselect
+            view: pim-filter-attribute-multiselect
         pim_catalog_simpleselect:
             view: pim-filter-simpleselect
         pim_catalog_date:
