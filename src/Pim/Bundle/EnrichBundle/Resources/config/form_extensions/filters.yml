@@ -45,9 +45,6 @@ extensions:
                 - "<"
                 - EMPTY
 
-    pim-filter-simpleselect:
-        module: pim/filter/simpleselect
-
     pim-filter-attribute-price-collection:
         module: pim/filter/attribute/price-collection
         config:

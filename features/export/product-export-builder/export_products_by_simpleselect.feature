@@ -7,14 +7,10 @@ Feature: Export products according to multi select reference data values
   Background:
     Given the "footwear" catalog configuration
     And the following products:
-      | sku    | family | name-en_US | weather_conditions |
-      | BOOT-1 | boots  | The boot 1 |                    |
-      | BOOT-2 | boots  | The boot 2 | dry                |
-      | BOOT-3 | boots  | The boot 3 | dry, wet           |
-      | BOOT-4 | boots  | The boot 4 | snowy              |
-      | BOOT-5 | boots  | The boot 5 | snowy              |
-      | BOOT-6 | boots  | The boot 6 | cold               |
-      | BOOT-7 | boots  | The boot 7 |                    |
+      | sku    | family | name-en_US | manufacturer |
+      | BOOT-1 | boots  | The boot 1 | Nike         |
+      | BOOT-2 | boots  | The boot 2 | Timberland   |
+      | BOOT-3 | boots  | The boot 3 |              |
     And the following jobs:
       | connector            | type   | alias              | code               | label              |
       | Akeneo CSV Connector | export | csv_product_export | csv_product_export | CSV product export |
@@ -25,68 +21,61 @@ Feature: Export products according to multi select reference data values
     Given I am logged in as "Julia"
     And I am on the "csv_product_export" export job edit page
     And I visit the "Content" tab
-    And I add available attributes Weather conditions
-    And I filter by "weather_conditions.code" with operator "In list" and value "Dry"
+    And I add available attributes Manufacturer
+    And I filter by "manufacturer.code" with operator "In list" and value "Nike"
     And I press the "Save" button
     When I launch the export job
     And I wait for the "csv_product_export" job to finish
     Then exported file of "csv_product_export" should contain:
       """
       sku;categories;color;description-en_US-mobile;enabled;family;groups;lace_color;manufacturer;name-en_US;price-EUR;price-USD;rating;side_view;size;top_view;weather_conditions
-      BOOT-2;;;;1;boots;;;;"The boot 2";;;;;;;dry
-      BOOT-3;;;;1;boots;;;;"The boot 3";;;;;;;dry,wet
+      BOOT-1;;;;1;boots;;;Nike;"The boot 1";;;;;;;
       """
 
   Scenario: Export only the product values with selected reference data values
     Given I am logged in as "Julia"
     And I am on the "csv_product_export" export job edit page
     And I visit the "Content" tab
-    And I add available attributes Weather conditions
-    And I filter by "weather_conditions.code" with operator "In list" and value "Dry,Cold"
+    And I add available attributes Manufacturer
+    And I filter by "manufacturer.code" with operator "In list" and value "Nike,Timberland"
     And I press the "Save" button
     When I launch the export job
     And I wait for the "csv_product_export" job to finish
     Then exported file of "csv_product_export" should contain:
       """
       sku;categories;color;description-en_US-mobile;enabled;family;groups;lace_color;manufacturer;name-en_US;price-EUR;price-USD;rating;side_view;size;top_view;weather_conditions
-      BOOT-2;;;;1;boots;;;;"The boot 2";;;;;;;dry
-      BOOT-3;;;;1;boots;;;;"The boot 3";;;;;;;dry,wet
-      BOOT-6;;;;1;boots;;;;"The boot 6";;;;;;;cold
+      BOOT-1;;;;1;boots;;;Nike;"The boot 1";;;;;;;
+      BOOT-2;;;;1;boots;;;Timberland;"The boot 2";;;;;;;
       """
 
   Scenario: Export only the product values without reference data values
     Given I am logged in as "Julia"
     And I am on the "csv_product_export" export job edit page
     And I visit the "Content" tab
-    And I add available attributes Weather conditions
-    And I filter by "weather_conditions.code" with operator "Empty" and value ""
+    And I add available attributes Manufacturer
+    And I filter by "manufacturer.code" with operator "Empty" and value ""
     And I press the "Save" button
     When I launch the export job
     And I wait for the "csv_product_export" job to finish
     Then exported file of "csv_product_export" should contain:
       """
       sku;categories;color;description-en_US-mobile;enabled;family;groups;lace_color;manufacturer;name-en_US;price-EUR;price-USD;rating;side_view;size;top_view;weather_conditions
-      BOOT-1;;;;1;boots;;;;"The boot 1";;;;;;;
-      BOOT-7;;;;1;boots;;;;"The boot 7";;;;;;;
+      BOOT-3;;;;1;boots;;;;"The boot 3";;;;;;;
       """
 
   Scenario: Export all the product values when no reference data is provided with operator IN LIST
     Given I am logged in as "Julia"
     And I am on the "csv_product_export" export job edit page
     And I visit the "Content" tab
-    And I add available attributes Weather conditions
-    And I filter by "weather_conditions.code" with operator "In list" and value ""
+    And I add available attributes Manufacturer
+    And I filter by "manufacturer.code" with operator "In list" and value ""
     And I press the "Save" button
     When I launch the export job
     And I wait for the "csv_product_export" job to finish
     Then exported file of "csv_product_export" should contain:
-      """
-      sku;categories;color;description-en_US-mobile;enabled;family;groups;lace_color;manufacturer;name-en_US;price-EUR;price-USD;rating;side_view;size;top_view;weather_conditions
-      BOOT-1;;;;1;boots;;;;"The boot 1";;;;;;;
-      BOOT-2;;;;1;boots;;;;"The boot 2";;;;;;;dry
-      BOOT-3;;;;1;boots;;;;"The boot 3";;;;;;;dry,wet
-      BOOT-4;;;;1;boots;;;;"The boot 4";;;;;;;snowy
-      BOOT-5;;;;1;boots;;;;"The boot 5";;;;;;;snowy
-      BOOT-6;;;;1;boots;;;;"The boot 6";;;;;;;cold
-      BOOT-6;;;;1;boots;;;;"The boot 7";;;;;;;
-      """
+     """
+     sku;categories;color;description-en_US-mobile;enabled;family;groups;lace_color;manufacturer;name-en_US;price-EUR;price-USD;rating;side_view;size;top_view;weather_conditions
+     BOOT-1;;;;1;boots;;;Nike;"The boot 1";;;;;;;
+     BOOT-2;;;;1;boots;;;TimberLand;"The boot 2";;;;;;;
+     BOOT-3;;;;1;boots;;;;"The boot 3";;;;;;;
+     """
