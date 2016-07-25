@@ -394,3 +394,4 @@
 - Change constructor of `Akeneo\Component\Batch\Event\InvalidItemEvent`.
 - Change constructor of `Akeneo\Component\Batch\Item\InvalidItemException`.
 - Change method `addWarning()` signature of `Akeneo\Component\Batch\Item\InvalidItemException`.
+- Fifth argument of the constructor of `Pim\Bundle\EnrichBundle\Controller\Rest\AttributeController` is now mandatory.
