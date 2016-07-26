@@ -18,10 +18,6 @@ Also, not every BC break has the same impact on project code. While some BC
 breaks require you to make significant changes to your classes or your
 architecture, others are fixed as easily as changing the name of a method.
 
-That's why we created this page for you. The section "Using Akeneo PIM Code" will
-tell you how you can ensure that your application won't break completely when
-upgrading to a newer version of the same major release branch.
-
 .. caution::
 
     This promise was introduced with Akeneo PIM 1.6 and does not apply to previous
@@ -29,19 +25,31 @@ upgrading to a newer version of the same major release branch.
     hovewer, our product is still young, evolving a lot and we can't ensure such API
     stability on all our business code.
 
-    We're starting this promise by a very limited amount of Interfaces and Classes. In
-    your project or extension, you'll probably need other interfaces and classes on which
-    we can't engage (for now).
+    We're starting this promise by a very limited amount of Interfaces and Classes tagged as `api`.
+    In your project or extension, you'll probably need to use other interfaces and classes tagged as `internal`
+    on which we can't engage (for now).
 
     However, we commit to improve our Backward Compatibility Promise in upcoming versions,
-    meaning we'll enlarge the coverage of the promise to make each minor version migration
+    meaning we'll enlarge the coverage of the `api` promise to make each minor version migration
     easier than the previous one.
+
+Using Akeneo CSV Files
+----------------------
+
+Since the 1.2, we take extreme care to don't change the CSV file format used for imports/exports between minor versions.
+We only allow ourselves to add columns in the files to support new features, for instance, when we've added variant groups attributes in 1.3, we added an 'attributes' column.
+The objective is to allow you to be able export a file in 1.x and import it in a following minor version without troubles.
+The only Backward Compatibility Break you can encounter here is the presence of a new mandatory column.
+In this case, the import will warn you and to migrate the file, you'll only need to add this column.
+We don't drop existing columns, we don't change the name of the headers and we don't change the way the data are imported.
+For instance, if the behaviour of a column import is erase and replace, it will stay like this for all upcoming minor versions.
 
 Using Akeneo PIM Code
 ---------------------
 
-If you are using Akeneo PIM in your extensions or projects, the following guidelines will help
-you to ensure smooth upgrades to all future minor releases of your Akeneo PIM version.
+If you are using Akeneo PIM in your extensions or projects, the following guidelines will 
+tell you how you can ensure that your application or extension won't break completely when
+upgrading to a newer version of the same major release branch.
 
 Using our Interfaces
 ~~~~~~~~~~~~~~~~~~~~
@@ -72,9 +80,9 @@ The following table explains in detail which use cases are covered by our backwa
 +-----------------------------------------------+-----------------------------+
 | Implement a method                            | Yes                         |
 +-----------------------------------------------+-----------------------------+
-| Add an argument to an implemented method      | No (TODO; Yes in SF)        |
+| Add an argument to an implemented method      | No (Yes in Symfony)         |
 +-----------------------------------------------+-----------------------------+
-| Add a default value to an argument            | No (TODO; Yes in SF)        |
+| Add a default value to an argument            | No (Yes in Symfony)         |
 +-----------------------------------------------+-----------------------------+
 
 Using our Classes
@@ -98,7 +106,7 @@ covered by our backwards compatibility promise:
 +-----------------------------------------------+-----------------------------+
 | Type hint against the class                   | Yes                         |
 +-----------------------------------------------+-----------------------------+
-| Create a new instance                         | Yes (TODO: construct breaks?|
+| Create a new instance                         | Yes cf note 1               |
 +-----------------------------------------------+-----------------------------+
 | Extend the class                              | Yes                         |
 +-----------------------------------------------+-----------------------------+
@@ -124,14 +132,16 @@ covered by our backwards compatibility promise:
 +-----------------------------------------------+-----------------------------+
 | Add a new method                              | No                          |
 +-----------------------------------------------+-----------------------------+
-| Add an argument to an overridden method       | No (TODO; Yes in SF)        |
+| Add an argument to an overridden method       | No (Yes in Symfony)         |
 +-----------------------------------------------+-----------------------------+
-| Add a default value to an argument            | No (TODO; Yes in SF)        |
+| Add a default value to an argument            | No (Yes in Symfony)         |
 +-----------------------------------------------+-----------------------------+
 | Call a private method (via Reflection)        | No                          |
 +-----------------------------------------------+-----------------------------+
 | Access a private property (via Reflection)    | No                          |
 +-----------------------------------------------+-----------------------------+
+
+Note 1, When a `Factory` or `Builder` service is provided to instanciate the object, please always use this service.
 
 ???TODO??
 About extends, it really depends on several factors, for instance, for most of our classes it would be
