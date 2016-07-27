@@ -4,9 +4,7 @@ namespace Pim\Component\Connector\Job\JobParameters\ConstraintCollectionProvider
 
 use Akeneo\Component\Batch\Job\JobInterface;
 use Akeneo\Component\Batch\Job\JobParameters\ConstraintCollectionProviderInterface;
-use Pim\Bundle\BaseConnectorBundle\Validator\Constraints\Channel;
 use Pim\Bundle\ImportExportBundle\Validator\Constraints\FilterData;
-use Pim\Component\Catalog\Validator\Constraints\Range;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\DateTime;

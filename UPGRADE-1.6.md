@@ -171,7 +171,18 @@ If you use in your import standard Akeneo PIM processor and reader services, ple
 
 TODO : This bundle will be removed after the export refactoring
 ```
-    find ./src/ -type f -print0 | xargs -0 sed -i 's/ Pim\\Bundle\\TransformBundle\\Cache/Pim\\Bundle\\BaseConnectorBundle\\Cache/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/ Pim\\Bundle\\BaseConnectorBundle\\DependencyInjection\\Compiler\\RegisterArchiversPass/Pim\\Bundle\\ConnectorBundle\\DependencyInjection\\Compiler\\RegisterArchiversPass/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/ Pim\\Bundle\\BaseConnectorBundle\\EventListener\\/Pim\\Bundle\\ConnectorBundle\\EventListener\\/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/ Pim\\Bundle\\BaseConnectorBundle\\Archiver\\/Pim\\Component\\Connector\\Archiver\\/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/ Pim\\Bundle\\BaseConnectorBundle\\Validator\\Constraints\\/Pim\\Component\\Connector\\Validator\\Constraints\/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.archiver\.file_writer_archiver/pim_connector\.archiver\.file_writer_archiver/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.event_listener\.archivist/pim_connector\.event_listener\.archivist/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.archiver/pim_connector\.archiver/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.archiver\.invalid_item_csv_archiver/pim_connector\.archiver\.invalid_item_csv_archiver/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.archiver\.file_reader_archiver/pim_connector\.archiver\.file_reader_archiver/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.factory\.zip_filesystem/pim_connector\.factory\.zip_filesystem/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.archiver\.archivable_file_writer_archiver/pim_connector\.archiver\.archivable_file_writer_archiver/g'
+    find ./src/ -type f -print0 | xargs -0 sed -i 's/pim_base_connector\.validator\.constraints\.channel_validator/pim_connector\.validator\.constraints\.channel_validator/g'
 ```
 
 See the documentation [here](http://docs.akeneo.com/latest/reference/import_export/index.html).
@@ -274,6 +285,57 @@ my_bundle.mass_edit_action.my_action:
                 acl: pim_enrich_product_edit_attributes
 ```
 In this example it is an action for the products grid and it must appear in the default group.
+
+## Product exports configuration format update
+
+As of 1.6, product export job configurations (raw parameters) have a different format.
+
+**Before 1.6:**
+```
+csv_product_export:
+    connector: Akeneo CSV Connector
+    alias:     csv_product_export
+    label:     Demo product export
+    type:      export
+    configuration:
+        channel:    mobile
+        delimiter:  ;
+        enclosure:  '"'
+        withHeader: true
+        filePath:   /tmp/product.csv
+        decimalSeparator: .
+```
+
+**Since 1.6:**
+```
+csv_product_export:
+    connector: Akeneo CSV Connector
+    alias:     csv_product_export
+    label:     Demo CSV product export
+    type:      export
+    configuration:
+        delimiter:  ;
+        enclosure:  '"'
+        withHeader: true
+        filePath:   /tmp/product.csv
+        decimalSeparator: .
+        filters:
+            data: []
+            structure:
+                scope: mobile
+                locales:
+                    - fr_FR
+                    - en_US
+                    - de_DE
+```
+
+You can now notice a `filters` key containing `data` and `structure`.
+- `data`: Restricts rows to export
+- `structure`: Restricts columns to export
+
+We provide doctrine migration to handle this change in your existing data.
+
+TODO: Add links to the docs.akeneo.com regarding this format update.
 
 ## Partially fix BC breaks
 
