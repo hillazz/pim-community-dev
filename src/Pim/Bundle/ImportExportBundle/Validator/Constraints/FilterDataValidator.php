@@ -26,12 +26,12 @@ class FilterDataValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint)
     {
-        if (!isset($value['data'])) {
+        if (!isset($value)) {
             $this->context->buildViolation($constraint->message)->addViolation();
         }
 
         try {
-            $pqb = $this->pqbFactory->create($value['data']);
+            $pqb = $this->pqbFactory->create($value);
             $pqb->execute();
         } catch (\Exception $e) {
             $this->context->buildViolation($constraint->message)->addViolation();
