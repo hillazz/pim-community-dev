@@ -26,10 +26,10 @@ class UpdatedSinceDate extends Constraint
     /**
      * {@inheritdoc}
      */
-    public function getDefaultOption()
-    {
-        return 'jobInstance';
-    }
+//    public function getDefaultOption()
+//    {
+//        return 'jobInstance';
+//    }
     
     /**
      * {@inheritdoc}

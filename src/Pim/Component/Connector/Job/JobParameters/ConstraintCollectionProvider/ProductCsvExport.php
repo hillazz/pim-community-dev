@@ -9,6 +9,7 @@ use Pim\Bundle\ImportExportBundle\Validator\Constraints\FilterStructure;
 use Pim\Bundle\ImportExportBundle\Validator\Constraints\FilterStructureAttribute;
 use Pim\Bundle\ImportExportBundle\Validator\Constraints\FilterStructureLocale;
 use Pim\Bundle\ImportExportBundle\Validator\Constraints\FilterStructureScope;
+use Pim\Bundle\ImportExportBundle\Validator\Constraints\UpdatedSinceDate;
 use Pim\Component\Connector\Validator\Constraints\Channel;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
