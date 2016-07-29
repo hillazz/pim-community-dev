@@ -16,6 +16,7 @@ Feature: Ensures acl are respected on the export profile tabs
     And I save the role
     When I am on the "csv_footwear_product_export" export job page
     Then I should be on the "Content" tab
+    And I should not see the text "General properties"
 
   Scenario: Should not see the general properties and content tab
     Given I revoke rights to resources Show an export profile general properties
@@ -23,6 +24,8 @@ Feature: Ensures acl are respected on the export profile tabs
     And I save the role
     When I am on the "csv_footwear_product_export" export job page
     Then I should be on the "History" tab
+    And I should not see the text "General properties"
+    And I should not see the text "Content"
 
   Scenario: Should not be able to edit the general properties job profile
     Given I revoke rights to resources Edit an export profile general properties
@@ -30,6 +33,7 @@ Feature: Ensures acl are respected on the export profile tabs
     And I save the role
     When I am on the "csv_footwear_product_export" export job edit page
     Then I should be on the "Content" tab
+    And I should not see the text "General properties"
 
   Scenario: Should not be able to edit the general properties and content tab
     Given I revoke rights to resources Edit an export profile general properties
@@ -37,3 +41,5 @@ Feature: Ensures acl are respected on the export profile tabs
     And I save the role
     When I am on the "csv_footwear_product_export" export job edit page
     Then I should be on the "History" tab
+    And I should not see the text "General properties"
+    And I should not see the text "Content"

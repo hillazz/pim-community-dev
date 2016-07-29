@@ -3,6 +3,7 @@
 namespace Context\Page\Export;
 
 use Context\Page\Base\Form;
+use Context\Spin\TimeoutException;
 
 /**
  * Export edit page
@@ -77,7 +78,7 @@ class Edit extends Form
             $node = $this->spin(function () use ($tab) {
                 return $this->getElement('Tabs')->find('css', sprintf('a:contains("%s")', $tab));
             }, sprintf('Cannot find form tab "%s"', $tab));
-        } catch (\Exception $e) {
+        } catch (TimeoutException $e) {
             $node = null;
         }
 

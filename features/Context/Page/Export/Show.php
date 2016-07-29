@@ -3,6 +3,7 @@
 namespace Context\Page\Export;
 
 use Context\Page\Job\Show as JobShow;
+use Context\Spin\TimeoutException;
 
 /**
  * Export show page
@@ -59,7 +60,7 @@ class Show extends JobShow
             $node = $this->spin(function () use ($tab) {
                 return $this->getElement('Tabs')->find('css', sprintf('a:contains("%s")', $tab));
             }, sprintf('Cannot find form tab "%s"', $tab));
-        } catch (\Exception $e) {
+        } catch (TimeoutException $e) {
             $node = null;
         }
 
