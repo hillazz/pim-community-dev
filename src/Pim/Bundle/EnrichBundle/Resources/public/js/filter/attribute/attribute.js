@@ -102,6 +102,8 @@ define([
          * @param {Object} attribute
          */
         addContextDropdowns: function (attribute) {
+            var container = $('<span class="filter-context">');
+
             if (attribute.scopable) {
                 var scopeSwitcher = new ScopeSwitcher();
 
@@ -123,11 +125,7 @@ define([
                     }
                 );
 
-                this.addElement(
-                    'after-input',
-                    'scope-switcher',
-                    scopeSwitcher.render().$el
-                );
+                container.append(scopeSwitcher.render().$el);
             }
 
             if (attribute.localizable) {
@@ -151,12 +149,14 @@ define([
                     }
                 );
 
-                this.addElement(
-                    'after-input',
-                    'locale-switcher',
-                    localeSwitcher.render().$el
-                );
+                container.append(localeSwitcher.render().$el);
             }
+
+            this.addElement(
+                'after-input',
+                'filter-context',
+                container
+            );
         },
 
         /**
